@@ -12,3 +12,4 @@ scrape_configs:
   - job_name: 'cAdvisor' 
     static_configs:
       - targets: ['10.235.2.100:8080']
+    
