@@ -26,22 +26,10 @@ public class ServletController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-       
-        switch(request.getParameter("action")) {
-            case Routes.LOGIN:
-              {dispatch(request, response, Routes.LOGIN);}
-              break;
-            case Routes.LOGOUT:
-              {dispatch(request, response, Routes.LOGOUT);}
-              break;
-            default:
-              { 
-                dispatch(request, response, Routes.WELCOME); 
-              }
-        }
-        
-       
+            throws ServletException, IOException {   
+    
+      dispatch(request, response, "login.jsp");    
+  
     }
     
     protected void dispatch(HttpServletRequest request, 
