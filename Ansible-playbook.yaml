@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+
+  tasks:
+
+  - name: Create network
+    docker_network:
+      name: network_app
+      ipam_config:
+        subnet: "172.16.98.0/24"
+
+  - name: Run MySQL container
+    docker_container:
+      name: 'mysql'
+      recreate: true
+      restart_policy: unless-stopped
+      image: 'mysql:8.0.30'
+      volumes:
+        - "db_vol:/var/lib/mysql"
+        - "./mysql-dump:/docker-entrypoint-initdb.d"
+      env:
+        MYSQL_ROOT_PASSWORD: "secret_root"
+        MYSQL_DATABASE: "db"
+        MYSQL_USER: "db_user"
+        MYSQL_PASSWORD: "secret_user"
+      networks:
+        - name: "network_app"
+        
+  - name: Run Tomcat container
+    docker_container:
+      name: 'tomcat'
+      recreate: true
+      restart_policy: unless-stopped
+      image: 'tomcat:10.1.0-jdk17'
+      published_ports:
+        - "8080:8080"
+        - "443:443"
+      volumes:
+        - "./target/ROOT.war:/usr/local/tomcat/webapps/ROOT.war"
+      networks:
+        - name: "network_app"        
+...
